@@ -39,6 +39,10 @@ class Invoice
     @line_items.any?(&:imported)
   end
 
+  def total
+    @line_items.reduce(0) { |sum, item| sum + item.total }.round(2)
+  end
+
   def slip
     ""
   end

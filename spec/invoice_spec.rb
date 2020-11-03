@@ -18,4 +18,10 @@ describe Invoice do
 
     expect(invoice.has_imported_items).to eq(false)
   end
+
+  it "should calculate totals" do
+    invoice = Invoice.from("2 books at 12.49\n1 packet of headache pills at 9.75")
+
+    expect(invoice.total).to eq(34.73)
+  end
 end
