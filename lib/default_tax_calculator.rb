@@ -1,5 +1,6 @@
 class DefaultTaxCalculator
 
+  PRECISION_IN_CENTS = 5
   IMPORTED_DESCRIPTOR = 'imported'.freeze
   IMPORT_DUTY = 0.05
   TAX_VALUE = 0.10
@@ -11,11 +12,13 @@ class DefaultTaxCalculator
     @tax_free_items = tax_free_items
   end
 
-  def calculate(description)
-    [
+  def calculate(description, price)
+    tax = [
       tax_free?(description) ? @tax_value : 0,
       imported?(description) ? @import_duty : 0
     ].sum
+
+    round(tax * (price * 100)).to_f / 100
   end
 
   def imported?(description)
@@ -24,5 +27,11 @@ class DefaultTaxCalculator
 
   def tax_free?(description)
     @tax_free_items.all? { |item| !description.include? item }
+  end
+
+  def round(value)
+    return value if (value % 5).zero?
+
+    ((value / PRECISION_IN_CENTS).floor * PRECISION_IN_CENTS) + PRECISION_IN_CENTS
   end
 end

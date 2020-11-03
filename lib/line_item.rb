@@ -4,13 +4,12 @@ class LineItem
   DEFAULT_TAX = 0.0
 
   attr_reader :value, :description, :quantity
-  attr_writer :tax
 
-  def initialize(quantity, description, value, tax = DEFAULT_TAX)
+  def initialize(quantity, description, value, taxes = DEFAULT_TAX)
     @quantity = quantity.to_i
     @description = description
     @value = value.to_f
-    @tax = tax
+    @taxes = taxes
   end
 
   def self.from(item, calculator)
@@ -20,19 +19,22 @@ class LineItem
 
     params = match.named_captures
 
+    quantity = params['quantity'].to_i
+    value = params['value'].to_f
+
     LineItem.new(
-      params['quantity'],
+      quantity,
       params['description'],
-      params['value'],
-      calculator.calculate(params['description'])
+      value,
+      calculator.calculate(params['description'], value)
     )
   end
 
   def taxes
-    (@value * @quantity * @tax).round(2)
+    @quantity * @taxes
   end
 
   def total
-    (@value * @quantity * (1 + @tax)).round(2)
+    (@quantity * @value) + taxes
   end
 end
