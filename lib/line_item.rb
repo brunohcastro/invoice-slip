@@ -1,15 +1,32 @@
 class LineItem
 
-  def initialize(quantity, description, value)
+  ITEM_TEMPLATE = /\A(?<quantity>\S+) (?<description>.+) at (?<value>\S+)\z/.freeze
+  DEFAULT_TAX = 0.0
+
+  attr_reader :value, :description, :quantity
+  attr_writer :tax
+
+  def initialize(quantity, description, value, tax = DEFAULT_TAX)
     @quantity = quantity.to_i
     @description = description
     @value = value.to_f
-    @imported = description.split.first == 'imported'
-    @tax = 0.0
+    @tax = tax
   end
 
-  attr_reader :imported, :value, :description, :quantity
-  attr_writer :tax
+  def self.from(item, calculator)
+    match = item.match(ITEM_TEMPLATE)
+
+    return nil if match.nil?
+
+    params = match.named_captures
+
+    LineItem.new(
+      params['quantity'],
+      params['description'],
+      params['value'],
+      calculator.calculate(params['description'])
+    )
+  end
 
   def taxes
     (@value * @quantity * @tax).round(2)
