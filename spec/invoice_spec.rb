@@ -1,5 +1,5 @@
 require 'minitest/autorun'
-require '../lib/invoice'
+require_relative '../lib/invoice'
 
 describe Invoice do
   it 'generate the invoice with line items for input' do
