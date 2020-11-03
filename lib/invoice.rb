@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
-require '../lib/line_item'
-require '../lib/tax_calculator'
+require_relative 'line_item'
+require_relative 'tax_calculator'
 
 class Invoice
 
@@ -59,6 +59,15 @@ class Invoice
   end
 
   def slip
-    ""
+    output = []
+
+    @line_items.each do |item|
+      output.push("#{item.quantity} #{item.description}: #{'%.2f' % item.total}")
+    end
+
+    output.push("Sales Taxes: #{'%.2f' % sales_taxes}")
+    output.push("Total: #{'%.2f' % total}")
+
+    output.join("\n")
   end
 end

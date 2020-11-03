@@ -4,7 +4,7 @@ class TaxCalculator
 
     @import_duty = 0.05
     @tax_value = 0.10
-    @tax_free_items = ['chocolate', 'book', 'pills']
+    @tax_free_items = %w[chocolate book pills]
   end
 
   def calculate(line_item)
