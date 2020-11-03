@@ -2,15 +2,17 @@
 
 ### Usage
 
-Use:
+To generate a invoice slip from a given input text file, run:
 ```shell script
 ruby bin/invoice_slip.rb input/input1.txt
 ```
-To generate a invoice slip from a given input.txt file, or use
+
+Or run the spec files with:
 ```shell script
 rake test
 ```
-To run the spec files. 
+
+### Changes
 
 I took the liberty of correcting the Output 3 text:
 ```
